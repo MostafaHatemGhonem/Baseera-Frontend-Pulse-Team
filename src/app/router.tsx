@@ -2,20 +2,37 @@
  * @file app/router.tsx
  */
 
+import { Suspense, lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { AppLayout }        from './AppLayout';
-import { DashboardPage }    from '@/pages/DashboardPage';
-import { TransactionsPage } from '@/pages/TransactionsPage';
-import { SubscriptionsPage } from '@/pages/SubscriptionsPage';
-import { AccountsPage }     from '@/pages/AccountsPage';
-import { AnalyticsPage }    from '@/pages/AnalyticsPage';
-import { ChatbotPage }      from '@/pages/ChatbotPage';
-import { LoginPage }        from '@/pages/LoginPage';
-
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
+import { Spinner } from '@/shared/ui/Spinner/Spinner';
+
+// Lazy load pages for code splitting
+const DashboardPage     = lazy(() => import('@/pages/DashboardPage').then(m => ({ default: m.DashboardPage })));
+const TransactionsPage  = lazy(() => import('@/pages/TransactionsPage').then(m => ({ default: m.TransactionsPage })));
+const SubscriptionsPage = lazy(() => import('@/pages/SubscriptionsPage').then(m => ({ default: m.SubscriptionsPage })));
+const AccountsPage      = lazy(() => import('@/pages/AccountsPage').then(m => ({ default: m.AccountsPage })));
+const AnalyticsPage     = lazy(() => import('@/pages/AnalyticsPage').then(m => ({ default: m.AnalyticsPage })));
+const ChatbotPage       = lazy(() => import('@/pages/ChatbotPage').then(m => ({ default: m.ChatbotPage })));
+const LoginPage         = lazy(() => import('@/pages/LoginPage').then(m => ({ default: m.LoginPage })));
+
+// Fallback loader for lazy pages
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[50vh]">
+    <Spinner size="lg" />
+  </div>
+);
 
 export const router = createBrowserRouter([
-  { path: '/login',    element: <LoginPage /> },
+  { 
+    path: '/login',    
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <LoginPage />
+      </Suspense>
+    ) 
+  },
   {
     path: '/',
     element: <ProtectedRoute />,
@@ -24,12 +41,12 @@ export const router = createBrowserRouter([
         path: '',
         element: <AppLayout />,
         children: [
-          { index: true,               element: <DashboardPage /> },
-          { path: 'transactions',      element: <TransactionsPage /> },
-          { path: 'subscriptions',     element: <SubscriptionsPage /> },
-          { path: 'accounts',          element: <AccountsPage /> },
-          { path: 'analytics',         element: <AnalyticsPage /> },
-          { path: 'chatbot',           element: <ChatbotPage /> },
+          { index: true,               element: <Suspense fallback={<PageLoader />}><DashboardPage /></Suspense> },
+          { path: 'transactions',      element: <Suspense fallback={<PageLoader />}><TransactionsPage /></Suspense> },
+          { path: 'subscriptions',     element: <Suspense fallback={<PageLoader />}><SubscriptionsPage /></Suspense> },
+          { path: 'accounts',          element: <Suspense fallback={<PageLoader />}><AccountsPage /></Suspense> },
+          { path: 'analytics',         element: <Suspense fallback={<PageLoader />}><AnalyticsPage /></Suspense> },
+          { path: 'chatbot',           element: <Suspense fallback={<PageLoader />}><ChatbotPage /></Suspense> },
         ],
       },
     ],
