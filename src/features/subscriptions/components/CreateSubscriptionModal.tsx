@@ -28,7 +28,8 @@ export function CreateSubscriptionModal() {
   if (activeModal !== 'createSubscription') return null;
 
   const onSubmit = (data: CreateSubscriptionForm) => {
-    createMutation.mutate(data, {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    createMutation.mutate(data as any, {
       onSuccess: () => {
         showNotification('success', 'تم إنشاء الاشتراك بنجاح!');
         reset();

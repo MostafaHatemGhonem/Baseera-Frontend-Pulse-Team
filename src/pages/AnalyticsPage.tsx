@@ -8,8 +8,7 @@ import { Skeleton } from '@/shared/ui/Skeleton';
 import { BarChart3, TrendingDown, Wallet, Activity } from 'lucide-react';
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend,
-  AreaChart, Area,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
 } from 'recharts';
 import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
 
@@ -136,12 +135,12 @@ export function AnalyticsPage() {
                   paddingAngle={3}
                 >
                   {spendData.map((_, idx) => (
-                    <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+                    <Cell key={idx} fill={COLORS[idx % COLORS.length] as string} />
                   ))}
                 </Pie>
                 <Tooltip
                   contentStyle={{ background: '#13132a', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '12px', color: '#e2e8f0' }}
-                  formatter={(v: number) => [`${v.toLocaleString('ar-SA')} ج.م`]}
+                  formatter={(v) => [`${Number(v ?? 0).toLocaleString('ar-SA')} ج.م`]}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -180,11 +179,11 @@ export function AnalyticsPage() {
                 <YAxis type="category" dataKey="name" stroke="#64748b" tick={{ fontSize: 12 }} width={70} />
                 <Tooltip
                   contentStyle={{ background: '#13132a', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '12px', color: '#e2e8f0' }}
-                  formatter={(v: number) => [`${v.toLocaleString('ar-SA')} ر.س`]}
+                  formatter={(v) => [`${Number(v ?? 0).toLocaleString('ar-SA')} ج.م`]}
                 />
                 <Bar dataKey="amount" radius={[0, 8, 8, 0]}>
                   {budgetData.map((_, idx) => (
-                    <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+                    <Cell key={idx} fill={COLORS[idx % COLORS.length] as string} />
                   ))}
                 </Bar>
               </BarChart>

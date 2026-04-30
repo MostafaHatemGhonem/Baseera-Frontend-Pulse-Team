@@ -3,11 +3,10 @@
  * @description The Wow Factor: Rich Media Chat Bubble with Markdown & Recharts
  */
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import type { Message } from '@/shared/lib/schemas/chat.schema';
 import ReactMarkdown from 'react-markdown';
 import { useTypingEffect } from '../hooks/useTypingEffect';
-import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface MessageBubbleProps {
   message: Message;

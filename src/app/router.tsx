@@ -12,13 +12,13 @@ import { AnalyticsPage }    from '@/pages/AnalyticsPage';
 import { ChatbotPage }      from '@/pages/ChatbotPage';
 import { LoginPage }        from '@/pages/LoginPage';
 
-// import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
+import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
 
 export const router = createBrowserRouter([
   { path: '/login',    element: <LoginPage /> },
   {
     path: '/',
-    // element: <ProtectedRoute />,
+    element: <ProtectedRoute />,
     children: [
       {
         path: '',

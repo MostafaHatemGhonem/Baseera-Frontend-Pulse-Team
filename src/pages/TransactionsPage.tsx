@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import { Card }   from '@/shared/ui/Card/Card';
-import { Button } from '@/shared/ui/Button/Button';
-import { Badge }  from '@/shared/ui/Badge/Badge';
 import { Skeleton } from '@/shared/ui/Skeleton';
-import { CreditCard, ScanLine, Receipt, ShoppingBag, Coffee, MonitorPlay, Zap } from 'lucide-react';
+import { CreditCard, ScanLine, ShoppingBag, Coffee, MonitorPlay, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTransactions, useUpdateTransactionStatus } from '@/features/transactions/hooks/useTransactions';
 import { OcrScannerModal } from '@/features/transactions/components/OcrScannerModal';
@@ -15,14 +12,6 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   Entertainment: <MonitorPlay size={18} />,
   Utilities:     <Zap size={18} />,
   Other:         <CreditCard size={18} />,
-};
-
-const CATEGORY_COLORS: Record<string, string> = {
-  Shopping:      'bg-[#E0F2FE] text-[#0EA5E9]',
-  Food:          'bg-[#E0F2FE] text-[#0EA5E9]',
-  Entertainment: 'bg-[#E0F2FE] text-[#0EA5E9]',
-  Utilities:     'bg-[#E0F2FE] text-[#0EA5E9]',
-  Other:         'bg-[#E0F2FE] text-[#0EA5E9]',
 };
 
 // Based on screenshot, icons have a light blue or purple circle background
@@ -178,7 +167,7 @@ export function TransactionsPage() {
           )}
 
           <AnimatePresence>
-            {filtered.map((tx, idx) => (
+            {filtered.map((tx) => (
               <TransactionRow
                 key={tx.id}
                 tx={tx}

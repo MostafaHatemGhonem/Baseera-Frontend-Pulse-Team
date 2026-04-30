@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ShieldCheck } from 'lucide-react';
 import { useLogin, useRegister } from '@/features/auth/hooks/useAuth';
 
 import BackgroundImage from "@/assets/images/Background Image for Illustration.png"
@@ -37,11 +36,13 @@ export function LoginPage() {
   });
 
   const registerForm = useForm<RegisterForm>({
-    resolver: zodResolver(RegisterSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(RegisterSchema) as any,
   });
 
   const onLoginSubmit = (data: LoginForm) => loginMutation.mutate(data);
-  const onRegisterSubmit = (data: RegisterForm) => registerMutation.mutate(data);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onRegisterSubmit = (data: RegisterForm) => registerMutation.mutate(data as any);
 
   return (
     <div

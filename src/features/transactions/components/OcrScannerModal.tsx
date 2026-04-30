@@ -3,13 +3,8 @@
  * @description نافذة المسح الضوئي للإيصالات — ترسل البيانات عبر POST /api/Transactions/ocr
  */
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button }    from '@/shared/ui/Button/Button';
-import { FormInput } from '@/shared/ui/Form/FormInput';
 import { useEffect, useState } from 'react';
-import { X, ScanLine, FileText } from 'lucide-react';
+import { ScanLine, FileText } from 'lucide-react';
 import { useSubmitOcr } from '../hooks/useTransactions';
 
 interface OcrScannerModalProps {

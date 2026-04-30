@@ -83,7 +83,8 @@ export function ChatbotDrawer() {
           {/* Drawer */}
           <motion.aside
             className="fixed inset-y-0 left-0 w-[400px] max-w-full bg-[#F8FAFC] shadow-2xl flex flex-col z-50"
-            variants={drawerVariants}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            variants={drawerVariants as any}
             initial="hidden"
             animate="visible"
             exit="exit"

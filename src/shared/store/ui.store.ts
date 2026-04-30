@@ -34,8 +34,9 @@ interface UIState {
   closeModal:     () => void;
 
   /* Global Notifications */
-  notification:   { type: 'success' | 'error' | 'info'; message: string } | null;
-  showNotification: (type: 'success' | 'error' | 'info', message: string) => void;
+  notification:      { type: 'success' | 'error' | 'info'; message: string } | null;
+  showNotification:  (type: 'success' | 'error' | 'info', message: string) => void;
+  clearNotification: () => void;
   isChatbotOpen: boolean;
 
   openChatbot:  () => void;

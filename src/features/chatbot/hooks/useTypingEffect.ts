@@ -21,7 +21,7 @@ export function useTypingEffect(text: string, speed: number = 20) {
 
     let i = 0;
     const interval = setInterval(() => {
-      setDisplayedText((prev) => {
+      setDisplayedText(() => {
         const nextContent = text.slice(0, i + 1);
         return nextContent;
       });

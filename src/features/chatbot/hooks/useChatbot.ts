@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { chatbotApi } from '../api/chatbot.api';
-import type { SendMessageRequest, ChatSession } from '@/shared/lib/schemas/chat.schema';
+import type { SendMessageRequest } from '@/shared/lib/schemas/chat.schema';
 
 export function useSendMessage() {
   return useMutation({

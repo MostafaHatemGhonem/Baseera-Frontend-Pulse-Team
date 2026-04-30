@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { RefreshCw, CheckCircle2, ShieldCheck, Clock, Sparkles, Link as LinkIcon } from 'lucide-react';
-import { useAccounts, useSyncAccounts } from '@/features/accounts/hooks/useAccounts';
-import type { SyncResponse } from '@/shared/lib/schemas/openapi.schema';
+import { useAccounts } from '@/features/accounts/hooks/useAccounts';
 import { Skeleton } from '@/shared/ui/Skeleton';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
@@ -11,31 +9,16 @@ const fmt = (n: number) => n.toLocaleString('ar-EG', { minimumFractionDigits: 2,
 const getProviderTheme = (providerName: string) => {
   const name = providerName.toLowerCase();
   if (name.includes('cib') || name.includes('تجاري')) {
-    return {
-      bg: 'bg-[#003B5C]',
-      logo: 'CIB',
-      isWallet: false,
-    };
+    return { bg: 'bg-[#003B5C]', logo: 'CIB', bankName: 'البنك التجاري الدولي', isWallet: false };
   }
   if (name.includes('vodafone') || name.includes('فودافون')) {
-    return {
-      bg: 'bg-[#E60000]',
-      logo: 'Vodafone Cash',
-      isWallet: true,
-    };
+    return { bg: 'bg-[#E60000]', logo: 'Vodafone Cash', bankName: 'فودافون مصر', isWallet: true };
   }
-  return {
-    bg: 'bg-slate-800',
-    logo: providerName.substring(0, 3).toUpperCase(),
-    bankName: providerName,
-    isWallet: false,
-  };
+  return { bg: 'bg-slate-800', logo: providerName.substring(0, 3).toUpperCase(), bankName: providerName, isWallet: false };
 };
 
 export function AccountsPage() {
   const { data: accounts, isLoading, error, refetch, isFetching } = useAccounts();
-  // We keep useSyncAccounts around in case we want to attach it to individual buttons later
-  const { mutate: sync, isPending: isSyncing } = useSyncAccounts();
 
   const handleGlobalSync = () => {
     refetch();
@@ -138,7 +121,6 @@ export function AccountsPage() {
 
                 <div className="absolute bottom-8 right-8 text-xs text-white/60 pointer-events-none">
                   <p className="mb-0.5">{theme.bankName}</p>
-                  <p>{theme.type}</p>
                 </div>
               </div>
             );

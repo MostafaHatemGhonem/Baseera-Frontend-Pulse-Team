@@ -258,7 +258,7 @@ export function DashboardPage() {
                     stroke="none"
                   >
                     {spendData.map((_, idx) => (
-                      <Cell key={idx} fill={CHART_COLORS[idx % CHART_COLORS.length]} />
+                      <Cell key={idx} fill={CHART_COLORS[idx % CHART_COLORS.length] as string} />
                     ))}
                   </Pie>
                   <Tooltip
@@ -270,7 +270,7 @@ export function DashboardPage() {
                       fontSize: '12px',
                       boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
                     }}
-                    formatter={(v: number) => [`${fmt(v)} ج.م`]}
+                    formatter={(v) => [`${fmt(Number(v ?? 0))} ج.م`]}
                   />
                 </PieChart>
               </ResponsiveContainer>
