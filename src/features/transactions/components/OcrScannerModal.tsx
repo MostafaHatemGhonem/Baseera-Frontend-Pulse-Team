@@ -41,14 +41,7 @@ export function OcrScannerModal({ isOpen, onClose }: OcrScannerModalProps) {
 
   const handleScan = () => {
     if (!file) return;
-    
-    // إرسال بيانات وهمية (Mock) لأن الـ Backend لم يتم برمجته بعد لاستقبال صور
-    submitOcr({
-      merchantName: 'مطعم السعادة',
-      amount: 150,
-      category: 'Food',
-      transactionDate: new Date().toISOString(),
-    }, {
+    submitOcr(file, {
       onSuccess: () => {
         setTimeout(() => {
           onClose();

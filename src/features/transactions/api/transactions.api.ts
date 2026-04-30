@@ -37,7 +37,6 @@ export const transactionsApi = {
 
   submitOcrResult: async (file: File): Promise<Transaction> => {
     const formData = new FormData();
-    // تغيير اسم الحقل إلى 'file' لأنه الاسم الافتراضي الشائع في .NET
     formData.append('file', file);
 
     try {
