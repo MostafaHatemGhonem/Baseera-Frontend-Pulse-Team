@@ -44,8 +44,8 @@ export function AppLayout() {
   return (
     <>
     <div className="flex min-h-screen bg-[#F4F7FF]" dir="rtl">
-      {/* ── Sidebar ── */}
-      <aside className="w-64 flex-shrink-0 flex flex-col bg-white border-l border-slate-200">
+      {/* ── Sidebar (Desktop/Tablet) ── */}
+      <aside className="hidden md:flex w-64 flex-shrink-0 flex-col bg-white border-l border-slate-200 z-10">
         {/* Logo */}
         <div className="p-6">
           <div className="flex items-center gap-3">
@@ -118,12 +118,16 @@ export function AppLayout() {
       <div className="flex-1 flex flex-col min-w-0">
         
         {/* ── Top Header ── */}
-        <header className="h-[72px] bg-white flex items-center justify-between px-8 border-b border-slate-200 shrink-0">
-          <div className="flex items-center gap-4">
-            <div className="text-xs text-slate-400 font-medium">سجل المعاملات</div>
+        <header className="h-[72px] bg-white flex items-center justify-between px-4 md:px-8 border-b border-slate-200 shrink-0 sticky top-0 z-20">
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Mobile Logo */}
+            <div className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center bg-[#1E293B]">
+              <span className="text-white font-bold text-sm">ب</span>
+            </div>
+            <div className="text-sm md:text-xs text-slate-400 font-medium hidden sm:block">لوحة التحكم</div>
           </div>
           
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3 md:gap-5">
             {/* Search */}
             <div className="relative hidden md:block">
               <input
@@ -157,7 +161,7 @@ export function AppLayout() {
         </header>
 
         {/* ── Main Content ── */}
-        <main className="flex-1 overflow-auto p-8 relative">
+        <main className="flex-1 overflow-auto p-4 pb-24 md:p-8 relative">
           <Notification />
           <div className="animate-fade-in max-w-5xl mx-auto">
             <ErrorBoundary>
@@ -166,6 +170,36 @@ export function AppLayout() {
           </div>
         </main>
       </div>
+      
+      {/* ── Bottom Navigation (Mobile Only) ── */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 flex items-center justify-around px-2 py-2 pb-safe z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+        {navItems.map(({ to, label, icon: Icon, ...rest }) => (
+          <NavLink
+            key={to}
+            to={to}
+            {...rest}
+            className={({ isActive }) => `
+              flex flex-col items-center gap-1 p-2 min-w-[64px] transition-colors
+              ${isActive ? 'text-[#8B5CF6]' : 'text-slate-400 hover:text-slate-600'}
+            `}
+          >
+            {({ isActive }) => (
+              <>
+                <Icon size={22} className={isActive ? 'text-[#8B5CF6]' : ''} />
+                <span className="text-[10px] font-medium">{label}</span>
+              </>
+            )}
+          </NavLink>
+        ))}
+        {/* Chatbot trigger in mobile */}
+        <button 
+          onClick={openChatbot}
+          className="flex flex-col items-center gap-1 p-2 min-w-[64px] text-slate-400 hover:text-slate-600 transition-colors"
+        >
+          <Sparkles size={22} />
+          <span className="text-[10px] font-medium">بصيرة</span>
+        </button>
+      </nav>
     </div>
 
     {/* ── AI Chatbot Drawer ── */}
