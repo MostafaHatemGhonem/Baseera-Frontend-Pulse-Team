@@ -3,7 +3,7 @@
  * @description نافذة المسح الضوئي للإيصالات — ترسل البيانات عبر POST /api/Transactions/ocr
  */
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ScanLine, FileText, Camera } from 'lucide-react';
 import { useSubmitOcr } from '../hooks/useTransactions';

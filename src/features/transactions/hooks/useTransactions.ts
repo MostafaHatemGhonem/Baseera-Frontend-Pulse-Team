@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { transactionsApi } from '../api/transactions.api';
-import type { OcrResult, TransactionStatus } from '@/shared/lib/schemas/openapi.schema';
+import type { TransactionStatus } from '@/shared/lib/schemas/openapi.schema';
 
 export function useTransactions(page = 1, pageSize = 50) {
   return useQuery({

@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { 
   TransactionSchema, 
   type Transaction, 
-  type OcrResult,
   type TransactionStatus 
 } from '@/shared/lib/schemas/openapi.schema';
 
