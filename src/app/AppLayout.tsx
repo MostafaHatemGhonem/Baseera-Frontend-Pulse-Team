@@ -21,6 +21,8 @@ import { useAuthStore } from '@/shared/store/auth.store';
 import { tokenService } from '@/shared/lib/axios';
 import { useUIStore } from '@/shared/store/ui.store';
 import { ChatbotDrawer } from '@/features/chatbot/components/ChatbotDrawer';
+import logo from '@/assets/images/logo.png';
+
 
 const navItems = [
   { to: '/',              label: 'لوحة القيادة',  icon: LayoutDashboard, end: true },
@@ -43,18 +45,18 @@ export function AppLayout() {
 
   return (
     <>
-    <div className="flex min-h-screen bg-[#F4F7FF]" dir="rtl">
+    <div className="flex h-screen h-[100dvh] bg-[#F4F7FF] overflow-hidden" dir="rtl">
       {/* ── Sidebar (Desktop/Tablet) ── */}
       <aside className="hidden md:flex w-64 flex-shrink-0 flex-col bg-white border-l border-slate-200 z-10">
         {/* Logo */}
         <div className="p-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#1E293B]">
-              <span className="text-white font-bold text-xl">ب</span>
+            <div className="w-30 h-30 flex items-center justify-center bg-white overflow-hidden shrink-0">
+              <img src={logo} alt="بصيرة" className="object-contain w-30 h-30" />
             </div>
             <div>
-              <p className="font-bold text-lg text-[#1E293B] leading-none">بصيرة</p>
-              <p className="text-[10px] text-slate-500 mt-1">الذكاء المالي</p>
+              <p className="font-bold text-xl text-[#1E293B] leading-none mb-1">بصيرة</p>
+              <p className="text-[11px] text-slate-500 font-medium">الذكاء المالي</p>
             </div>
           </div>
         </div>
@@ -96,6 +98,7 @@ export function AppLayout() {
           
           <div className="flex flex-col mt-2">
             <button
+              onClick={() => navigate('/profile')}
               aria-label="الإعدادات"
               className="flex items-center gap-3 px-2 py-2.5 text-slate-500 hover:text-[#1E293B] text-sm transition-colors"
             >
@@ -121,8 +124,11 @@ export function AppLayout() {
         <header className="h-[72px] bg-white flex items-center justify-between px-4 md:px-8 border-b border-slate-200 shrink-0 sticky top-0 z-20">
           <div className="flex items-center gap-2 md:gap-4">
             {/* Mobile Logo */}
-            <div className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center bg-[#1E293B]">
-              <span className="text-white font-bold text-sm">ب</span>
+            <div className="md:hidden flex items-center gap-2">
+              <div className="w-9 h-9 flex items-center justify-center bg-white rounded-lg shadow-sm border border-slate-100 overflow-hidden shrink-0">
+                <img src={logo} alt="بصيرة" className="object-contain w-7 h-7" />
+              </div>
+              <span className="font-bold text-base text-[#1E293B]">بصيرة</span>
             </div>
             <div className="text-sm md:text-xs text-slate-400 font-medium hidden sm:block">لوحة التحكم</div>
           </div>
@@ -151,8 +157,22 @@ export function AppLayout() {
               <Bell size={20} />
             </button>
 
+            {/* Logout (Mobile Only) */}
+            <button 
+              onClick={handleLogout}
+              className="md:hidden text-slate-400 hover:text-red-500 transition-colors relative ml-1"
+              aria-label="تسجيل الخروج"
+              title="تسجيل الخروج"
+            >
+              <LogOut size={20} />
+            </button>
+
             {/* Profile */}
-            <button className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors">
+            <button 
+              onClick={() => navigate('/profile')}
+              className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors"
+              title="الملف الشخصي"
+            >
               <div className="w-5 h-5 rounded-full border border-slate-400 flex items-center justify-center overflow-hidden">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               </div>

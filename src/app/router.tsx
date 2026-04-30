@@ -15,7 +15,9 @@ const SubscriptionsPage = lazy(() => import('@/pages/SubscriptionsPage').then(m 
 const AccountsPage      = lazy(() => import('@/pages/AccountsPage').then(m => ({ default: m.AccountsPage })));
 const AnalyticsPage     = lazy(() => import('@/pages/AnalyticsPage').then(m => ({ default: m.AnalyticsPage })));
 const ChatbotPage       = lazy(() => import('@/pages/ChatbotPage').then(m => ({ default: m.ChatbotPage })));
+const ProfilePage       = lazy(() => import('@/pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
 const LoginPage         = lazy(() => import('@/pages/LoginPage').then(m => ({ default: m.LoginPage })));
+const ForgotPasswordPage= lazy(() => import('@/pages/ForgotPasswordPage').then(m => ({ default: m.ForgotPasswordPage })));
 
 // Fallback loader for lazy pages
 const PageLoader = () => (
@@ -33,6 +35,14 @@ export const router = createBrowserRouter([
       </Suspense>
     ) 
   },
+  { 
+    path: '/forgot-password',    
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <ForgotPasswordPage />
+      </Suspense>
+    ) 
+  },
   {
     path: '/',
     element: <ProtectedRoute />,
@@ -47,6 +57,7 @@ export const router = createBrowserRouter([
           { path: 'accounts',          element: <Suspense fallback={<PageLoader />}><AccountsPage /></Suspense> },
           { path: 'analytics',         element: <Suspense fallback={<PageLoader />}><AnalyticsPage /></Suspense> },
           { path: 'chatbot',           element: <Suspense fallback={<PageLoader />}><ChatbotPage /></Suspense> },
+          { path: 'profile',           element: <Suspense fallback={<PageLoader />}><ProfilePage /></Suspense> },
         ],
       },
     ],

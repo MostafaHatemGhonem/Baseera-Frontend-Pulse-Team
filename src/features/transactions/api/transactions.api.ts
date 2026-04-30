@@ -35,11 +35,20 @@ export const transactionsApi = {
     return result.data;
   },
 
-  submitOcrResult: async (ocrData: OcrResult): Promise<Transaction> => {
-    const { data } = await apiClient.post('/Transactions/ocr', ocrData);
-    const result = TransactionSchema.safeParse(data);
-    if (!result.success) return data as Transaction;
-    return result.data;
+  submitOcrResult: async (file: File): Promise<Transaction> => {
+    const formData = new FormData();
+    // تغيير اسم الحقل إلى 'file' لأنه الاسم الافتراضي الشائع في .NET
+    formData.append('file', file);
+
+    try {
+      const { data } = await apiClient.post('/Transactions/ocr', formData);
+      const result = TransactionSchema.safeParse(data);
+      if (!result.success) return data as Transaction;
+      return result.data;
+    } catch (error: any) {
+      console.error('OCR Upload Error Details:', error.response?.data);
+      throw error;
+    }
   },
 
   updateTransactionStatus: async (id: string, status: TransactionStatus): Promise<Transaction> => {

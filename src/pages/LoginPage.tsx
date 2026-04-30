@@ -3,6 +3,7 @@
  */
 
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -130,7 +131,7 @@ export function LoginPage() {
               {/* Password Input */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <a href="#" className="text-xs text-[#8B5CF6] hover:underline">نسيت كلمة المرور؟</a>
+                  <Link to="/forgot-password" className="text-xs text-[#8B5CF6] hover:underline">نسيت كلمة المرور؟</Link>
                   <label htmlFor="login-password" className="text-sm font-medium text-[#1E293B]">
                     كلمة المرور
                   </label>
@@ -174,7 +175,7 @@ export function LoginPage() {
                     id="firstName"
                     type="text"
                     required
-                    placeholder="أحمد"
+                    placeholder="الاسم الاول"
                     className="w-full h-12 px-4 rounded-lg border border-[#CBD5E1] bg-white text-[#1E293B] placeholder-[#94A3B8] focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none text-right transition-all"
                     {...registerForm.register('firstName')}
                   />
@@ -187,7 +188,7 @@ export function LoginPage() {
                     id="lastName"
                     type="text"
                     required
-                    placeholder="الشمري"
+                    placeholder="اسم العائلة"
                     className="w-full h-12 px-4 rounded-lg border border-[#CBD5E1] bg-white text-[#1E293B] placeholder-[#94A3B8] focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none text-right transition-all"
                     {...registerForm.register('lastName')}
                   />

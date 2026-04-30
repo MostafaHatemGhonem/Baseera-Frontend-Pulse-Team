@@ -3,8 +3,9 @@
  * @description نافذة المسح الضوئي للإيصالات — ترسل البيانات عبر POST /api/Transactions/ocr
  */
 
-import { useEffect, useState } from 'react';
-import { ScanLine, FileText } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import { ScanLine, FileText, Camera } from 'lucide-react';
 import { useSubmitOcr } from '../hooks/useTransactions';
 
 interface OcrScannerModalProps {
@@ -13,114 +14,137 @@ interface OcrScannerModalProps {
 }
 
 export function OcrScannerModal({ isOpen, onClose }: OcrScannerModalProps) {
-  const [scanning, setScanning] = useState(true);
-  const { mutate: submitOcr } = useSubmitOcr();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const { mutate: submitOcr, isPending: scanning } = useSubmitOcr();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Reset state when opened
+  useEffect(() => {
     if (isOpen) {
-      setScanning(true);
-      // Simulate scanning process
-      const timer = setTimeout(() => {
-        setScanning(false);
-        // Automatically submit a mock transaction when scan completes
-        submitOcr(
-          {
-            merchantName: 'مطعم السعادة',
-            amount: 150,
-            category: 'Food',
-            transactionDate: new Date().toISOString(),
-          },
-          {
-            onSuccess: () => {
-              setTimeout(() => {
-                onClose();
-              }, 1500);
-            },
-          }
-        );
-      }, 3000); // 3 seconds scan time
-
-      return () => clearTimeout(timer);
+      setSelectedImage(null);
+      setFile(null);
     }
-  }, [isOpen, submitOcr, onClose]);
+  }, [isOpen]);
 
-  if (!isOpen) return null;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
+    if (selected) {
+      setFile(selected);
+      setSelectedImage(URL.createObjectURL(selected));
+    }
+  };
 
-  return (
+  const handleScan = () => {
+    if (!file) return;
+    
+    // إرسال بيانات وهمية (Mock) لأن الـ Backend لم يتم برمجته بعد لاستقبال صور
+    submitOcr({
+      merchantName: 'مطعم السعادة',
+      amount: 150,
+      category: 'Food',
+      transactionDate: new Date().toISOString(),
+    }, {
+      onSuccess: () => {
+        setTimeout(() => {
+          onClose();
+        }, 1000);
+      }
+    });
+  };
+
+  if (!isOpen || !mounted) return null;
+
+  const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm animate-fade-in p-4"
       dir="rtl"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
-        className="w-full max-w-[400px] bg-[#F8FAFC] rounded-[24px] shadow-2xl flex flex-col items-center p-8 text-center"
+        className="w-full max-w-[400px] bg-[#F8FAFC] rounded-[28px] shadow-2xl flex flex-col items-center p-8 text-center"
         role="dialog"
         aria-modal="true"
         aria-labelledby="ocr-modal-title"
       >
         
         {/* Top Icon */}
-        <div className="w-14 h-14 rounded-2xl bg-[#E0E7FF] text-[#8B5CF6] flex items-center justify-center mb-6 shadow-sm">
+        <div className="w-14 h-14 rounded-2xl bg-[#E0E7FF] text-[#8B5CF6] flex items-center justify-center mb-5 shadow-sm">
           <ScanLine size={28} />
         </div>
 
         {/* Text */}
-        <h2 id="ocr-modal-title" className="text-2xl font-bold text-[#1E293B] mb-2">جاري تحليل الإيصال...</h2>
-        <p className="text-[#64748B] text-sm mb-8 px-4">
-          يقوم الذكاء الاصطناعي باستخراج البيانات وتصنيف النفقات
+        <h2 id="ocr-modal-title" className="text-2xl font-bold text-[#1E293B] mb-2">
+          {scanning ? 'جاري تحليل الإيصال...' : 'مسح إيصال جديد'}
+        </h2>
+        <p className="text-[#64748B] text-sm mb-6 px-2">
+          {scanning ? 'يقوم الذكاء الاصطناعي باستخراج البيانات وتصنيف النفقات' : 'التقط صورة للإيصال أو قم برفعها من جهازك لتحليلها تلقائياً'}
         </p>
 
         {/* Scanner Image Area */}
-        <div className="relative w-full h-[220px] bg-slate-100 rounded-xl overflow-hidden mb-8 border border-slate-200 flex items-center justify-center">
+        <div className={`relative w-full h-[240px] rounded-2xl overflow-hidden mb-8 flex items-center justify-center transition-all duration-300 ${!selectedImage ? 'bg-slate-50 border-2 border-dashed border-slate-300 hover:bg-slate-100 hover:border-violet-400 group' : 'bg-slate-100 border border-slate-200'}`}>
           
-          {/* Mock Receipt Background */}
-          <div className="w-3/4 h-full bg-white shadow-sm border border-slate-200 rotate-2 p-4 text-left flex flex-col gap-2 relative">
-            <h4 className="text-center font-mono font-bold text-slate-700 text-xs border-b border-dashed border-slate-300 pb-2">RESTAURANT RECEIPT</h4>
-            <div className="flex justify-between font-mono text-[10px] text-slate-500 mt-2">
-              <span>STEAK</span><span>$99.00</span>
-            </div>
-            <div className="flex justify-between font-mono text-[10px] text-slate-500">
-              <span>BEVERAGE</span><span>$24.00</span>
-            </div>
-            <div className="flex justify-between font-mono text-[10px] text-slate-500">
-              <span>TAX</span><span>$10.00</span>
-            </div>
-            <div className="flex justify-between font-mono text-xs font-bold text-slate-700 border-t border-dashed border-slate-300 pt-2 mt-auto">
-              <span>TOTAL</span><span>$133.00</span>
-            </div>
-            <div className="text-center font-mono text-[8px] text-slate-400 mt-2">THANK YOU</div>
-          </div>
-
-          {/* Scanning Line Animation */}
-          {scanning && (
-            <>
-              <div 
-                className="absolute inset-0 bg-gradient-to-b from-transparent via-[#8B5CF6]/30 to-[#8B5CF6] opacity-40 animate-scan"
-                style={{ height: '50%', borderBottom: '2px solid #8B5CF6' }}
+          {!selectedImage ? (
+            <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
+              <input 
+                id="ocr-file-upload"
+                type="file" 
+                accept="image/*" 
+                capture="environment" 
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                onChange={handleFileChange}
               />
-            </>
-          )}
-
-          {!scanning && (
-            <div className="absolute inset-0 bg-white/60 flex items-center justify-center backdrop-blur-[2px]">
-              <div className="bg-[#10B981] text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg flex items-center gap-2">
-                <FileText size={16} />
-                تم الاستخراج بنجاح
+              <div className="w-16 h-16 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-violet-200 transition-all duration-300 shadow-sm">
+                <Camera size={32} />
               </div>
+              <span className="text-slate-700 font-bold mb-1">اضغط لالتقاط صورة</span>
+              <span className="text-slate-400 text-xs font-medium">أو المس لرفع ملف من جهازك</span>
             </div>
+          ) : (
+            <>
+              {/* Selected Image */}
+              <img src={selectedImage} alt="Receipt" className="w-full h-full object-cover opacity-90" />
+              
+              {/* Scanning Line Animation */}
+              {scanning && (
+                <div 
+                  className="absolute inset-0 bg-gradient-to-b from-transparent via-[#8B5CF6]/40 to-[#8B5CF6] opacity-60 animate-scan shadow-[0_4px_20px_rgba(139,92,246,0.3)]"
+                  style={{ height: '50%', borderBottom: '3px solid #8B5CF6' }}
+                />
+              )}
+            </>
           )}
 
         </div>
 
-        {/* Cancel Button */}
-        <button 
-          onClick={onClose}
-          className="px-6 py-2 bg-white border border-slate-300 text-slate-600 rounded-full text-sm font-medium hover:bg-slate-50 transition-colors shadow-sm"
-        >
-          إلغاء التحليل
-        </button>
+        {/* Actions */}
+        <div className="flex w-full gap-3">
+          <button 
+            onClick={onClose}
+            disabled={scanning}
+            className="flex-1 py-3.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm disabled:opacity-50"
+          >
+            إلغاء
+          </button>
+          
+          {selectedImage && !scanning && (
+            <button 
+              onClick={handleScan}
+              className="flex-1 py-3.5 bg-[#10B981] text-white rounded-xl text-sm font-bold hover:bg-[#059669] transition-all shadow-md shadow-emerald-200 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95"
+            >
+              <FileText size={18} />
+              تحليل الآن
+            </button>
+          )}
+        </div>
 
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

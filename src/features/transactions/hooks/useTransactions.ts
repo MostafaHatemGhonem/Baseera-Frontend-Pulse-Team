@@ -13,7 +13,7 @@ export function useSubmitOcr() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (ocrData: OcrResult) => transactionsApi.submitOcrResult(ocrData),
+    mutationFn: (file: File) => transactionsApi.submitOcrResult(file),
     onSuccess: () => {
       // Invalidate to fetch the new pending transaction
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
